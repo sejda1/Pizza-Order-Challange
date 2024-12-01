@@ -1,5 +1,10 @@
-export default function Order (){
-return (
-    <p>Siparis Detaylari</p>
-)
+import FormPizza from "../components/FormPizza";
+
+export default function Order () {
+
+    return (
+        <>
+        <FormPizza/>
+        </>
+    )
 }
