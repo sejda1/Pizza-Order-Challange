@@ -66,7 +66,9 @@ export default function FormPizza() {
       setCounter((prevData) => prevData - 1);
     }
   };
-
+//Siparis secimlerinin toplami ve genel toplam
+  const choose = (data.ingredients.value.length )*5;
+  const total = (counter*85.50)+ choose;
 
     console.log('Boyut:', data.size.value);
     console.log('Hamur:', data.dough.value);
@@ -163,6 +165,17 @@ export default function FormPizza() {
                     <Button onClick={decrementer}>-</Button>
                     <Button>{counter}</Button>
                     <Button onClick={incrementer}>+</Button>
+                </div>
+                <div>
+                    <p>Sipariş Toplamı</p>
+                    <div>
+                    <p>Seçimler:</p>
+                    <span>{choose }&#8378;</span>
+                    </div>
+                    <div>
+                   <p>Toplam:</p>
+                   <span>{total} &#8378;</span>
+                   </div>
                 </div>
                 <Button onClick={handleClick}>Siparisi tamamla</Button>
             </Form>
