@@ -4,6 +4,7 @@ import { useState } from 'react';
 import { Form, FormGroup, Input, Button } from 'reactstrap';
 
 
+
 export default function FormPizza() {
     const history = useHistory();
     const handleClick = () => {
@@ -13,24 +14,29 @@ export default function FormPizza() {
         name: "",
         size: { value: "", options: ["S", "M", "L"] },
         dough: { value: "", options: ["Kalın", "Orta", "İnce", "Süper İnce"] },
-        ingredients: {value:"",options:['Pepperoni', 'Tavuk Izgara', 'Mısır', 'Sarımsak',
-            'Ananas', 'Sosis', 'Soğan', 'Sucuk', 'Biber',
-            'Kabak', 'Kanada Jambonu', 'Domates', 'Jalepeno', 'Kavurma']},
+        ingredients: {
+            value: "", options: ['Pepperoni', 'Tavuk Izgara', 'Mısır', 'Sarımsak',
+                'Ananas', 'Sosis', 'Soğan', 'Sucuk', 'Biber',
+                'Kabak', 'Kanada Jambonu', 'Domates', 'Jalepeno', 'Kavurma']
+        },
         note: "",
         quantity: 1,
     };
 
     const [data, setData] = useState(formData);
     //console.log(data.size.options);
-   
 
-    const handleChange = (e) => {
-        const { name, value } = e.target;
+    // boyut icin onChange handler 
+    const handleChange = (event) => {
+        const { name, value } = event.target;
         setData((prevData) => ({
             ...prevData,
             [name]: { ...prevData[name], value },
         }));
     };
+
+
+
 
     return (
         <>
@@ -48,12 +54,31 @@ export default function FormPizza() {
                                 checked={data.size.value === size}
                                 onChange={handleChange}
                             />
-                            <Label for={size}>{size}</Label> {/* Label dışarıda kullanıldı */}
+                            <Label for={size}>{size}</Label>
                         </FormGroup>
                     ))}
                 </FormGroup>
 
                 {/* hamur secimi icin dropdown */}
+                <FormGroup>
+                    <Label for="dough">Hamur Seçiniz <span>&#42;</span></Label>
+                    <Input
+                        type="select"
+                        name="dough"
+                        id="dough"
+                        value={data.dough.value}
+                        onChange={handleChange}
+                    >
+                        <option value="" caret>Hamur Kalınlığı </option>
+                        {data.dough.options.map((dough, index) => (
+                            <option key={index} value={dough}>
+                                {dough}
+                            </option>
+                        ))}
+                    </Input>
+                </FormGroup>
+
+
 
                 {/* malzeme secimi icin checkbox */}
                 {/* not icin input textarea */}
