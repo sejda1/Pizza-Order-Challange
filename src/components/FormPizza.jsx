@@ -15,7 +15,7 @@ export default function FormPizza() {
         size: { value: "", options: ["S", "M", "L"] },
         dough: { value: "", options: ["Kalın", "Orta", "İnce", "Süper İnce"] },
         ingredients: {
-            value: "", options: ['Pepperoni', 'Tavuk Izgara', 'Mısır', 'Sarımsak',
+            value: [], options: ['Pepperoni', 'Tavuk Izgara', 'Mısır', 'Sarımsak',
                 'Ananas', 'Sosis', 'Soğan', 'Sucuk', 'Biber',
                 'Kabak', 'Kanada Jambonu', 'Domates', 'Jalepeno', 'Kavurma']
         },
@@ -26,15 +26,32 @@ export default function FormPizza() {
     const [data, setData] = useState(formData);
     //console.log(data.size.options);
 
-    // boyut icin onChange handler 
+    // boyut ve hamur  icin onChange handler 
     const handleChange = (event) => {
         const { name, value } = event.target;
+
         setData((prevData) => ({
             ...prevData,
             [name]: { ...prevData[name], value },
         }));
     };
 
+
+    // Malzeme seçimi için checkbox onChange handler
+    const handleCheckboxChange = (event) => {
+        const { value, checked } = event.target; // Checkbox'ın value ve checked durumunu alıyoruz.
+    
+        setData((prevData) => ({ // State'i güncellemek için önceki state'i alıyoruz.
+            ...prevData, // Diğer tüm form verilerini koruyoruz.
+            ingredients: { // Ingredients nesnesini güncelliyoruz.
+                ...prevData.ingredients, // Ingredients nesnesinin mevcut durumunu koruyoruz.
+                value: checked // Checkbox işaretli mi?
+                    ? [...prevData.ingredients.value, value] // Eğer işaretliyse, mevcut listeye yeni malzemeyi ekliyoruz.
+                    : prevData.ingredients.value.filter((ingredient) => ingredient !== value) // Eğer işaret kaldırıldıysa, listeden bu malzemeyi çıkarıyoruz.
+            }
+        }));
+    };
+    
 
 
 
@@ -77,10 +94,29 @@ export default function FormPizza() {
                         ))}
                     </Input>
                 </FormGroup>
+                
+                {/* Malzeme Seçimi (Checkbox) */}
+                <FormGroup>
+                    <Label>Malzeme Seçiniz <span>&#42;</span></Label>
+                    <fieldset>
+                        <legend>En fazla 10 malzeme seçebilirsiniz. (5 &#8378; her biri)</legend>
+                        <div>
+                            {data.ingredients.options.map((ingredient, index) => (
+                                <div key={index}>
+                                    <Input
+                                        type="checkbox"
+                                        id={`ingredient-${index}`}
+                                        value={ingredient}
+                                        checked={data.ingredients.value.includes(ingredient)} 
+                                        onChange={handleCheckboxChange}
+                                    />
+                                    <Label for={`ingredient-${index}`}>{ingredient}</Label>
+                                </div>
+                            ))}
+                        </div>
+                    </fieldset>
+                </FormGroup>
 
-
-
-                {/* malzeme secimi icin checkbox */}
                 {/* not icin input textarea */}
                 <Button onClick={handleClick}>Siparisi tamamla</Button>
             </Form>
