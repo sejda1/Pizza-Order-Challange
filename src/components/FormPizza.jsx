@@ -58,6 +58,15 @@ export default function FormPizza() {
         setData({ ...data, [name]: value })
     }
 
+    //Sayac 
+    const [counter, setCounter] = useState(1);
+   const incrementer = () => {setCounter((prevData)=> prevData+1)};
+   const decrementer = () => {
+    if (counter > 1) {
+      setCounter((prevData) => prevData - 1);
+    }
+  };
+
 
     console.log('Boyut:', data.size.value);
     console.log('Hamur:', data.dough.value);
@@ -150,6 +159,11 @@ export default function FormPizza() {
                         placeholder="İsim Soyisim"
                         onChange={handleTextChange} />
                 </FormGroup>
+                <div>
+                    <Button onClick={decrementer}>-</Button>
+                    <Button>{counter}</Button>
+                    <Button onClick={incrementer}>+</Button>
+                </div>
                 <Button onClick={handleClick}>Siparisi tamamla</Button>
             </Form>
         </>
