@@ -40,7 +40,7 @@ export default function FormPizza() {
     // Malzeme seçimi için checkbox onChange handler
     const handleCheckboxChange = (event) => {
         const { value, checked } = event.target; // Checkbox'ın value ve checked durumunu alıyoruz.
-    
+
         setData((prevData) => ({ // State'i güncellemek için önceki state'i alıyoruz.
             ...prevData, // Diğer tüm form verilerini koruyoruz.
             ingredients: { // Ingredients nesnesini güncelliyoruz.
@@ -51,9 +51,19 @@ export default function FormPizza() {
             }
         }));
     };
-    
+
+    //Not ve isim  için eventhandler
+    const handleTextChange = (event) => {
+        const { name, value } = event.target;
+        setData({ ...data, [name]: value })
+    }
 
 
+    console.log('Boyut:', data.size.value);
+    console.log('Hamur:', data.dough.value);
+    console.log('Seçilen Malzemeler:', data.ingredients.value);
+    console.log('Not:', data.note);
+    console.log('İsim:', data.name);
 
     return (
         <>
@@ -94,7 +104,7 @@ export default function FormPizza() {
                         ))}
                     </Input>
                 </FormGroup>
-                
+
                 {/* Malzeme Seçimi (Checkbox) */}
                 <FormGroup>
                     <Label>Malzeme Seçiniz <span>&#42;</span></Label>
@@ -107,7 +117,7 @@ export default function FormPizza() {
                                         type="checkbox"
                                         id={`ingredient-${index}`}
                                         value={ingredient}
-                                        checked={data.ingredients.value.includes(ingredient)} 
+                                        checked={data.ingredients.value.includes(ingredient)}
                                         onChange={handleCheckboxChange}
                                     />
                                     <Label for={`ingredient-${index}`}>{ingredient}</Label>
@@ -118,6 +128,28 @@ export default function FormPizza() {
                 </FormGroup>
 
                 {/* not icin input textarea */}
+                <FormGroup>
+                    <Label for="note">
+                        Sipariş Notu
+                    </Label>
+                    <Input type="textarea"
+                        id="note"
+                        name="note"
+                        value={data.note}
+                        placeholder="Siparişine eklemek istediğin bir not var mı?"
+                        onChange={handleTextChange}
+                    />
+                </FormGroup>
+                 {/* isim icin input text */}
+                <FormGroup>
+                    <Label for="name">Pizza kim için hazırlanıyor?</Label>
+                    <input type="text"
+                        name="name"
+                        id="name"
+                        value={data.name}
+                        placeholder="İsim Soyisim"
+                        onChange={handleTextChange} />
+                </FormGroup>
                 <Button onClick={handleClick}>Siparisi tamamla</Button>
             </Form>
         </>
