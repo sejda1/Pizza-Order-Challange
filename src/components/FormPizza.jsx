@@ -42,7 +42,7 @@ export default function FormPizza() {
     const handleCheckboxChange = (event) => {
         const { value, checked } = event.target;
         const updatedIngredients = checked
-            ? [...data.ingredients.value, value]
+            ? [...data.ingredients.value, value] 
             : data.ingredients.value.filter((ingredient) => ingredient !== value);
 
         const updatedData = { ...data, ingredients: { ...data.ingredients, value: updatedIngredients } };

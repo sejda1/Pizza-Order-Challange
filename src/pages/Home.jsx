@@ -1,4 +1,5 @@
 import { useHistory } from "react-router-dom";
+import Head from "../components/Head";
 
 export default function Home () {
     const history = useHistory();
@@ -9,8 +10,9 @@ export default function Home () {
 
     return(
         <>
-        <p>Anasayfa</p>
-        <button onClick={handleClick}>Siparis Ver</button>
+        <Head/>
+       <button onClick={handleClick}>Siparis Ver</button>
+       
         </>
     )
 }
