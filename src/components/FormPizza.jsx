@@ -5,7 +5,7 @@ import { Form, FormGroup, Input, Button } from 'reactstrap';
 
 
 export default function FormPizza() {
-   
+
     const formData = {
         name: "",
         size: { value: "", options: ["S", "M", "L"] },
@@ -20,7 +20,7 @@ export default function FormPizza() {
     };
 
     const [data, setData] = useState(formData);
-   
+
 
     // boyut ve hamur  icin onChange handler 
     const handleChange = (event) => {
@@ -57,11 +57,27 @@ export default function FormPizza() {
         }));
     };
 
-console.log("Ad-Soyad:", data.name);
-console.log("Boyut:", data.size.value);
-console.log("Hamur:", data.dough.value);
-console.log("Malzemeler:", data.ingredients.value);
-console.log("Not:", data.note)
+    // sayac 
+    const incrementQuantity = () => {
+        setData((prevData) => ({
+            ...prevData,
+            quantity: prevData.quantity + 1,
+        }));
+    };
+
+    const decrementQuantity = () => {
+        setData((prevData) => ({
+            ...prevData,
+            quantity: Math.max(1, prevData.quantity - 1), // 1'den küçük olamaz
+        }));
+    };
+
+    console.log("Ad-Soyad:", data.name);
+    console.log("Boyut:", data.size.value);
+    console.log("Hamur:", data.dough.value);
+    console.log("Malzemeler:", data.ingredients.value);
+    console.log("Not:", data.note);
+    console.log("Adet:", data.quantity);
 
 
 
@@ -137,8 +153,6 @@ console.log("Not:", data.note)
                         </div>
                     </fieldset>
                 </FormGroup>
-
-                {/* not icin input textarea */}
                 {/* Not */}
                 <FormGroup>
                     <Label for="note">Sipariş Notu</Label>
@@ -151,6 +165,16 @@ console.log("Not:", data.note)
                         onChange={handleInputChange}
                     />
                 </FormGroup>
+                {/* Sayac */}
+                <FormGroup>
+                    <div>
+                        <Button onClick={decrementQuantity}>-</Button>
+                        <span style={{ padding: "0 10px" }}>{data.quantity}</span>
+                        <Button onClick={incrementQuantity}>+</Button>
+                    </div>
+                </FormGroup>
+
+
                 <Button type='submit'>Siparisi tamamla</Button>
             </Form>
         </>
