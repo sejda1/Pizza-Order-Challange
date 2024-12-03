@@ -2,6 +2,7 @@ import { Label, FormFeedback } from "reactstrap";
 import { useState } from 'react';
 import { Form, FormGroup, Input, Button } from 'reactstrap';
 import axios from 'axios';
+import { useHistory } from "react-router-dom/cjs/react-router-dom.min";
 
 export default function FormPizza() {
 
@@ -26,6 +27,8 @@ export default function FormPizza() {
         ingredients: ""
     });
     const [isFormValid, setIsFormValid] = useState(false);
+
+    const history = useHistory();
 
     // Boyut ve Hamur için onChange handler
     const handleSelectChange = (event) => {
@@ -98,11 +101,12 @@ export default function FormPizza() {
         axios.post("https://reqres.in/api/pizza", data)
             .then((response) => {
                 console.log("Sipariş Başarılı:", response.data);
-                alert("Siparişiniz başarıyla alındı!");
             })
             .catch((error) => {
                 console.error("Sipariş Hatası:", error);
             });
+
+            history.push("/success");
     };
 
     return (
