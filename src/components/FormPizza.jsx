@@ -1,8 +1,7 @@
-import { Label } from "reactstrap";
+import { Label, FormFeedback } from "reactstrap";
 import { useState } from 'react';
 import { Form, FormGroup, Input, Button } from 'reactstrap';
-
-
+import axios from 'axios';
 
 export default function FormPizza() {
 
@@ -20,44 +19,43 @@ export default function FormPizza() {
     };
 
     const [data, setData] = useState(formData);
+    const [formErrors, setFormErrors] = useState({
+        name: "",
+        size: "",
+        dough: "",
+        ingredients: ""
+    });
+    const [isFormValid, setIsFormValid] = useState(false);
 
-
-    // boyut ve hamur  icin onChange handler 
-    const handleChange = (event) => {
+    // Boyut ve Hamur için onChange handler
+    const handleSelectChange = (event) => {
         const { name, value } = event.target;
-
-        setData((prevData) => ({
-            ...prevData,
-            [name]: { ...prevData[name], value },
-        }));
+        const updatedData = { ...data, [name]: { ...data[name], value } };
+        setData(updatedData);
+        validateForm(updatedData);
     };
 
-
-    // Malzeme seçimi için checkbox onChange handler
+    // Checkbox değişiklikleri için handler
     const handleCheckboxChange = (event) => {
-        const { value, checked } = event.target; // Checkbox'ın value ve checked durumunu alıyoruz.
+        const { value, checked } = event.target;
+        const updatedIngredients = checked
+            ? [...data.ingredients.value, value]
+            : data.ingredients.value.filter((ingredient) => ingredient !== value);
 
-        setData((prevData) => ({ // State'i güncellemek için önceki state'i alıyoruz.
-            ...prevData, // Diğer tüm form verilerini koruyoruz.
-            ingredients: { // Ingredients nesnesini güncelliyoruz.
-                ...prevData.ingredients, // Ingredients nesnesinin mevcut durumunu koruyoruz.
-                value: checked // Checkbox işaretli mi?
-                    ? [...prevData.ingredients.value, value] // Eğer işaretliyse, mevcut listeye yeni malzemeyi ekliyoruz.
-                    : prevData.ingredients.value.filter((ingredient) => ingredient !== value) // Eğer işaret kaldırıldıysa, listeden bu malzemeyi çıkarıyoruz.
-            }
-        }));
+        const updatedData = { ...data, ingredients: { ...data.ingredients, value: updatedIngredients } };
+        setData(updatedData);
+        validateForm(updatedData);
     };
 
-    // ad-soyad ve not icin event handler 
+    // Ad-Soyad ve Not için handler
     const handleInputChange = (e) => {
         const { name, value } = e.target;
-        setData((prevData) => ({
-            ...prevData,
-            [name]: value,
-        }));
+        const updatedData = { ...data, [name]: value };
+        setData(updatedData);
+        validateForm(updatedData);
     };
 
-    // sayac 
+    // Sayaç
     const incrementQuantity = () => {
         setData((prevData) => ({
             ...prevData,
@@ -72,20 +70,45 @@ export default function FormPizza() {
         }));
     };
 
-    console.log("Ad-Soyad:", data.name);
-    console.log("Boyut:", data.size.value);
-    console.log("Hamur:", data.dough.value);
-    console.log("Malzemeler:", data.ingredients.value);
-    console.log("Not:", data.note);
-    console.log("Adet:", data.quantity);
+    const choose = data.ingredients.value.length * 5;
+    const total = data.quantity * 85.50 + choose;
 
+    // Form doğrulama fonksiyonu
+    const validateForm = (updatedData) => {
+        const errors = {
+            name: updatedData.name.length < 3 ? "İsim 3 karakterden az olamaz" : "",
+            size: !updatedData.size.value ? "Lütfen boyut seçiniz" : "",
+            dough: !updatedData.dough.value ? "Lütfen hamur kalınlığını seçiniz" : "",
+            ingredients: updatedData.ingredients.value.length < 4 || updatedData.ingredients.value.length > 10
+                ? "Malzeme seçiminiz en az 4, en çok 10 olmalıdır"
+                : "",
+        };
+        setFormErrors(errors);
+        setIsFormValid(Object.values(errors).every((error) => error === ""));
+    };
 
+    // Form gönderiminde tetiklenen handler
+    const handleSubmit = (event) => {
+        event.preventDefault();
+        if (!isFormValid) {
+            alert("Lütfen tüm alanları doğru şekilde doldurun.");
+            return;
+        }
 
+        axios.post("https://reqres.in/api/pizza", data)
+            .then((response) => {
+                console.log("Sipariş Başarılı:", response.data);
+                alert("Siparişiniz başarıyla alındı!");
+            })
+            .catch((error) => {
+                console.error("Sipariş Hatası:", error);
+            });
+    };
 
     return (
         <>
-            <Form>
-                {/*Isim soyisim alani */}
+            <Form onSubmit={handleSubmit}>
+                {/* İsim Soyisim Alanı */}
                 <FormGroup>
                     <Label for="name">Pizza kim için hazırlanıyor?</Label>
                     <Input
@@ -95,9 +118,12 @@ export default function FormPizza() {
                         value={data.name}
                         placeholder="İsim Soyisim"
                         onChange={handleInputChange}
+                        invalid={!!formErrors.name}
                     />
+                    <FormFeedback>{formErrors.name}</FormFeedback>
                 </FormGroup>
-                {/* boyut secimi icin radio button */}
+
+                {/* Boyut Seçimi */}
                 <FormGroup>
                     <Label for="size">Boyut Seçiniz <span>&#42;</span></Label>
                     {data.size.options.map((size) => (
@@ -108,13 +134,16 @@ export default function FormPizza() {
                                 id={size}
                                 value={size}
                                 checked={data.size.value === size}
-                                onChange={handleChange}
+                                onChange={handleSelectChange}
+                                invalid={!!formErrors.size}
                             />
                             <Label for={size}>{size}</Label>
                         </FormGroup>
                     ))}
+                    {formErrors.size && <FormFeedback>{formErrors.size}</FormFeedback>}
                 </FormGroup>
-                {/* hamur secimi icin dropdown */}
+
+                {/* Hamur Seçimi */}
                 <FormGroup>
                     <Label for="dough">Hamur Seçiniz <span>&#42;</span></Label>
                     <Input
@@ -122,38 +151,41 @@ export default function FormPizza() {
                         name="dough"
                         id="dough"
                         value={data.dough.value}
-                        onChange={handleChange}
+                        onChange={handleSelectChange}
+                        invalid={!!formErrors.dough}
                     >
-                        <option value="" >Hamur Kalınlığı </option>
+                        <option value="">Hamur Kalınlığı</option>
                         {data.dough.options.map((dough, index) => (
                             <option key={index} value={dough}>
                                 {dough}
                             </option>
                         ))}
                     </Input>
+                    {formErrors.dough && <FormFeedback>{formErrors.dough}</FormFeedback>}
                 </FormGroup>
+
                 {/* Malzeme Seçimi (Checkbox) */}
                 <FormGroup>
                     <Label>Malzeme Seçiniz <span>&#42;</span></Label>
                     <fieldset>
                         <legend>En fazla 10 malzeme seçebilirsiniz. (5 &#8378; her biri)</legend>
-                        <div>
-                            {data.ingredients.options.map((ingredient, index) => (
-                                <div key={index}>
-                                    <Input
-                                        type="checkbox"
-                                        id={`ingredient-${index}`}
-                                        value={ingredient}
-                                        checked={data.ingredients.value.includes(ingredient)}
-                                        onChange={handleCheckboxChange}
-                                    />
-                                    <Label for={`ingredient-${index}`}>{ingredient}</Label>
-                                </div>
-                            ))}
-                        </div>
+                        {data.ingredients.options.map((ingredient, index) => (
+                            <div key={index}>
+                                <Input
+                                    type="checkbox"
+                                    id={`ingredient-${index}`}
+                                    value={ingredient}
+                                    checked={data.ingredients.value.includes(ingredient)}
+                                    onChange={handleCheckboxChange}
+                                />
+                                <Label for={`ingredient-${index}`}>{ingredient}</Label>
+                            </div>
+                        ))}
                     </fieldset>
+                    {formErrors.ingredients && <FormFeedback>{formErrors.ingredients}</FormFeedback>}
                 </FormGroup>
-                {/* Not */}
+
+                {/* Not Alanı */}
                 <FormGroup>
                     <Label for="note">Sipariş Notu</Label>
                     <Input
@@ -165,18 +197,28 @@ export default function FormPizza() {
                         onChange={handleInputChange}
                     />
                 </FormGroup>
-                {/* Sayac */}
+
+                {/* Miktar Sayacı */}
                 <FormGroup>
-                    <div>
-                        <Button onClick={decrementQuantity}>-</Button>
-                        <span style={{ padding: "0 10px" }}>{data.quantity}</span>
-                        <Button onClick={incrementQuantity}>+</Button>
-                    </div>
+                    <Button onClick={(e) => { e.preventDefault(); decrementQuantity(); }}>-</Button>
+                    <span style={{ padding: "0 10px" }}>{data.quantity}</span>
+                    <Button onClick={(e) => { e.preventDefault(); incrementQuantity(); }}>+</Button>
                 </FormGroup>
+            {/* Sipariş Toplamı */}
+            <FormGroup>
+                <p>Sipariş Toplamı</p>
+                <div>
+                    <p>Seçimler:</p>
+                    <span>{choose}&#8378;</span>
+                </div>
+                <div>
+                    <p>Toplam:</p>
+                    <span>{total}&#8378;</span>
+                </div>
+            </FormGroup>
 
-
-                <Button type='submit'>Siparisi tamamla</Button>
+                <Button type='submit' disabled={!isFormValid}>Siparişi Tamamla</Button>
             </Form>
         </>
-    )
+    );
 }
