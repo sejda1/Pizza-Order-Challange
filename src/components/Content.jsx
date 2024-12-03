@@ -1,4 +1,7 @@
+import { useHistory } from "react-router-dom";
 export default function Content () {
+    const history = useHistory();
+    const handleClick =()=> history.push("/order"); 
     return (
         <>
          <main className="wrapper">

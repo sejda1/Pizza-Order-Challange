@@ -2,7 +2,7 @@ import { useHistory } from "react-router-dom";
 export default function Header () {
     const history = useHistory();
 
-    const handleClick = () => {
+    const handleRedirected = () => {
         history.push("/order");
     }
     return (
@@ -13,7 +13,7 @@ export default function Header () {
                     <h1>KOD ACIKTIRIR</h1>
                     <h1>PIZZA, DOYURUR</h1>
                 </div>
-                <button onClick={handleClick} className="btn">ACIKTIM</button>
+                <button onClick={handleRedirected} className="btn">ACIKTIM</button>
                 
             </section>
         </header>
