@@ -1,4 +1,3 @@
-import { useHistory } from "react-router-dom/cjs/react-router-dom.min"
 import { Label } from "reactstrap";
 import { useState } from 'react';
 import { Form, FormGroup, Input, Button } from 'reactstrap';
@@ -6,10 +5,7 @@ import { Form, FormGroup, Input, Button } from 'reactstrap';
 
 
 export default function FormPizza() {
-    const history = useHistory();
-    const handleClick = () => {
-        history.push("/success");
-    }
+   
     const formData = {
         name: "",
         size: { value: "", options: ["S", "M", "L"] },
@@ -24,7 +20,7 @@ export default function FormPizza() {
     };
 
     const [data, setData] = useState(formData);
-    //console.log(data.size.options);
+   
 
     // boyut ve hamur  icin onChange handler 
     const handleChange = (event) => {
@@ -52,33 +48,39 @@ export default function FormPizza() {
         }));
     };
 
-    //Not ve isim  için eventhandler
-    const handleTextChange = (event) => {
-        const { name, value } = event.target;
-        setData({ ...data, [name]: value })
-    }
+    // ad-soyad ve not icin event handler 
+    const handleInputChange = (e) => {
+        const { name, value } = e.target;
+        setData((prevData) => ({
+            ...prevData,
+            [name]: value,
+        }));
+    };
 
-    //Sayac 
-    const [counter, setCounter] = useState(1);
-   const incrementer = () => {setCounter((prevData)=> prevData+1)};
-   const decrementer = () => {
-    if (counter > 1) {
-      setCounter((prevData) => prevData - 1);
-    }
-  };
-//Siparis secimlerinin toplami ve genel toplam
-  const choose = (data.ingredients.value.length )*5;
-  const total = (counter*85.50)+ choose;
+console.log("Ad-Soyad:", data.name);
+console.log("Boyut:", data.size.value);
+console.log("Hamur:", data.dough.value);
+console.log("Malzemeler:", data.ingredients.value);
+console.log("Not:", data.note)
 
-    console.log('Boyut:', data.size.value);
-    console.log('Hamur:', data.dough.value);
-    console.log('Seçilen Malzemeler:', data.ingredients.value);
-    console.log('Not:', data.note);
-    console.log('İsim:', data.name);
+
+
 
     return (
         <>
             <Form>
+                {/*Isim soyisim alani */}
+                <FormGroup>
+                    <Label for="name">Pizza kim için hazırlanıyor?</Label>
+                    <Input
+                        type="text"
+                        name="name"
+                        id="name"
+                        value={data.name}
+                        placeholder="İsim Soyisim"
+                        onChange={handleInputChange}
+                    />
+                </FormGroup>
                 {/* boyut secimi icin radio button */}
                 <FormGroup>
                     <Label for="size">Boyut Seçiniz <span>&#42;</span></Label>
@@ -96,7 +98,6 @@ export default function FormPizza() {
                         </FormGroup>
                     ))}
                 </FormGroup>
-
                 {/* hamur secimi icin dropdown */}
                 <FormGroup>
                     <Label for="dough">Hamur Seçiniz <span>&#42;</span></Label>
@@ -107,7 +108,7 @@ export default function FormPizza() {
                         value={data.dough.value}
                         onChange={handleChange}
                     >
-                        <option value="" caret>Hamur Kalınlığı </option>
+                        <option value="" >Hamur Kalınlığı </option>
                         {data.dough.options.map((dough, index) => (
                             <option key={index} value={dough}>
                                 {dough}
@@ -115,7 +116,6 @@ export default function FormPizza() {
                         ))}
                     </Input>
                 </FormGroup>
-
                 {/* Malzeme Seçimi (Checkbox) */}
                 <FormGroup>
                     <Label>Malzeme Seçiniz <span>&#42;</span></Label>
@@ -139,45 +139,19 @@ export default function FormPizza() {
                 </FormGroup>
 
                 {/* not icin input textarea */}
+                {/* Not */}
                 <FormGroup>
-                    <Label for="note">
-                        Sipariş Notu
-                    </Label>
-                    <Input type="textarea"
+                    <Label for="note">Sipariş Notu</Label>
+                    <Input
+                        type="textarea"
                         id="note"
                         name="note"
                         value={data.note}
                         placeholder="Siparişine eklemek istediğin bir not var mı?"
-                        onChange={handleTextChange}
+                        onChange={handleInputChange}
                     />
                 </FormGroup>
-                 {/* isim icin input text */}
-                <FormGroup>
-                    <Label for="name">Pizza kim için hazırlanıyor?</Label>
-                    <input type="text"
-                        name="name"
-                        id="name"
-                        value={data.name}
-                        placeholder="İsim Soyisim"
-                        onChange={handleTextChange} />
-                </FormGroup>
-                <div>
-                    <Button onClick={decrementer}>-</Button>
-                    <Button>{counter}</Button>
-                    <Button onClick={incrementer}>+</Button>
-                </div>
-                <div>
-                    <p>Sipariş Toplamı</p>
-                    <div>
-                    <p>Seçimler:</p>
-                    <span>{choose }&#8378;</span>
-                    </div>
-                    <div>
-                   <p>Toplam:</p>
-                   <span>{total} &#8378;</span>
-                   </div>
-                </div>
-                <Button onClick={handleClick}>Siparisi tamamla</Button>
+                <Button type='submit'>Siparisi tamamla</Button>
             </Form>
         </>
     )
