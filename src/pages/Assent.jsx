@@ -1,4 +1,6 @@
 import { useLocation } from 'react-router-dom';
+import Head from '../components/Head';
+import Footers from '../components/Footer';
 
 export default function Assent() {
     const location = useLocation();
@@ -13,24 +15,30 @@ export default function Assent() {
 
     return (
         <>
-            <p>Siparişiniz alındı</p>
-
-            <p>Ad-Soyad: {formData.name}</p>
-            <p>Boyut: {formData.size.value}</p>
-            <p>Hamur: {formData.dough.value}</p>
-            <p>Malzemeler: {formData.ingredients.value.join(', ')}</p>
-            <p>Not: {formData.note}</p>
-            <p>Adet: {formData.quantity}</p>
-            
-            <p>Sipariş Toplamı</p>
-            <div>
-                <p>Seçimler:</p>
-                <span>{choose} &#8378;</span>
+            <Head/>
+            <p>lezzetin yolda</p>
+            <h1>SİPARİŞİNİZ ALINDI</h1>
+            <hr />
+            <div className="order-detail">
+                <p>Ad-Soyad: {formData.name}</p>
+                <p>Boyut: {formData.size.value}</p>
+                <p>Hamur: {formData.dough.value}</p>
+                <p>Malzemeler: {formData.ingredients.value.join(', ')}</p>
+                <p>Not: {formData.note}</p>
+                <p>Adet: {formData.quantity}</p>
             </div>
-            <div>
-                <p>Toplam:</p>
-                <span>{total} &#8378;</span>
+            <div className='payment'>
+                <p>Sipariş Toplamı</p>
+                <div>
+                    <p>Seçimler:</p>
+                    <span>{choose} &#8378;</span>
+                </div>
+                <div>
+                    <p>Toplam:</p>
+                    <span>{total} &#8378;</span>
+                </div>
             </div>
+            <Footers/>
         </>
     );
 }
