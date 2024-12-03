@@ -101,12 +101,13 @@ export default function FormPizza() {
         axios.post("https://reqres.in/api/pizza", data)
             .then((response) => {
                 console.log("Sipariş Başarılı:", response.data);
+                history.push("/success", { orderData: response.data, formData: data });
             })
             .catch((error) => {
                 console.error("Sipariş Hatası:", error);
             });
 
-            history.push("/success");
+
     };
 
     return (
@@ -208,18 +209,18 @@ export default function FormPizza() {
                     <span style={{ padding: "0 10px" }}>{data.quantity}</span>
                     <Button onClick={(e) => { e.preventDefault(); incrementQuantity(); }}>+</Button>
                 </FormGroup>
-            {/* Sipariş Toplamı */}
-            <FormGroup>
-                <p>Sipariş Toplamı</p>
-                <div>
-                    <p>Seçimler:</p>
-                    <span>{choose}&#8378;</span>
-                </div>
-                <div>
-                    <p>Toplam:</p>
-                    <span>{total}&#8378;</span>
-                </div>
-            </FormGroup>
+                {/* Sipariş Toplamı */}
+                <FormGroup>
+                    <p>Sipariş Toplamı</p>
+                    <div>
+                        <p>Seçimler:</p>
+                        <span>{choose}&#8378;</span>
+                    </div>
+                    <div>
+                        <p>Toplam:</p>
+                        <span>{total}&#8378;</span>
+                    </div>
+                </FormGroup>
 
                 <Button type='submit' disabled={!isFormValid}>Siparişi Tamamla</Button>
             </Form>
