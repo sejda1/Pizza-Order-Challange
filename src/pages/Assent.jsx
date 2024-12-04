@@ -1,6 +1,7 @@
 import { useLocation } from 'react-router-dom';
 import Head from '../components/Head';
 import Footers from '../components/Footer';
+import "../components/Success.css";
 
 export default function Assent() {
     const location = useLocation();
@@ -16,9 +17,11 @@ export default function Assent() {
     return (
         <>
             <Head/>
-            <p>lezzetin yolda</p>
+            <div className='assent'>
+            <p className="yellowText">lezzetin yolda</p>
             <h1>SİPARİŞİNİZ ALINDI</h1>
-            <hr />
+            <div class="horizontal-line"></div>
+            <p className="pizzaName">Position Absolute Acı Pizza</p>
             <div className="order-detail">
                 <p>Ad-Soyad: {formData.name}</p>
                 <p>Boyut: {formData.size.value}</p>
@@ -29,14 +32,15 @@ export default function Assent() {
             </div>
             <div className='payment'>
                 <p>Sipariş Toplamı</p>
-                <div>
+                <div className='chooser'>
                     <p>Seçimler:</p>
                     <span>{choose} &#8378;</span>
                 </div>
-                <div>
+                <div className='totals'>
                     <p>Toplam:</p>
                     <span>{total} &#8378;</span>
                 </div>
+            </div>
             </div>
             <Footers/>
         </>

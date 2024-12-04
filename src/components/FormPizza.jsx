@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { Form, FormGroup, Label, Input, Button, FormFeedback } from 'reactstrap';
 import axios from 'axios';
 import { useHistory } from "react-router-dom/cjs/react-router-dom.min";
-import "./FormPizza.css"
+import "./FormPizza.css";
 
 export default function FormPizza() {
     const errorMessage = {
