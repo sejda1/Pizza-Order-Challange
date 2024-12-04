@@ -6,7 +6,7 @@ export default function Order () {
     return (
         <>
         <OrderHeader/>
-        <FormPizza/>
+        <FormPizza />
         <Footers/>
         </>
     )
