@@ -1,64 +1,58 @@
-import { Label, FormFeedback } from "reactstrap";
-import { useState } from 'react';
-import { Form, FormGroup, Input, Button } from 'reactstrap';
+import { useState, useEffect } from 'react';
+import { Form, FormGroup, Label, Input, Button, FormFeedback } from 'reactstrap';
 import axios from 'axios';
 import { useHistory } from "react-router-dom/cjs/react-router-dom.min";
 
 export default function FormPizza() {
+    const errorMessage = {
+        name: "İsim 3 karakterden az olamaz.",
+        size: "Lütfen boyut seçiniz.",
+        dough: "Lütfen hamur kalınlığını seçiniz.",
+        ingredients: "Malzeme seçiminiz en az 4, en çok 10 olmalıdır."
+    };
 
     const formData = {
         name: "",
         size: { value: "", options: ["S", "M", "L"] },
         dough: { value: "", options: ["Kalın", "Orta", "İnce", "Süper İnce"] },
         ingredients: {
-            value: [], options: ['Pepperoni', 'Tavuk Izgara', 'Mısır', 'Sarımsak',
+            value: [],
+            options: ['Pepperoni', 'Tavuk Izgara', 'Mısır', 'Sarımsak',
                 'Ananas', 'Sosis', 'Soğan', 'Sucuk', 'Biber',
                 'Kabak', 'Kanada Jambonu', 'Domates', 'Jalepeno', 'Kavurma']
         },
         note: "",
-        quantity: 1,
+        quantity: 1
     };
 
     const [data, setData] = useState(formData);
-    const [formErrors, setFormErrors] = useState({
-        name: "",
-        size: "",
-        dough: "",
-        ingredients: ""
-    });
+    const [formErrors, setFormErrors] = useState({});
     const [isFormValid, setIsFormValid] = useState(false);
 
     const history = useHistory();
 
-    // Boyut ve Hamur için onChange handler
     const handleSelectChange = (event) => {
         const { name, value } = event.target;
         const updatedData = { ...data, [name]: { ...data[name], value } };
         setData(updatedData);
-        validateForm(updatedData);
     };
 
-    // Checkbox değişiklikleri için handler
     const handleCheckboxChange = (event) => {
         const { value, checked } = event.target;
         const updatedIngredients = checked
-            ? [...data.ingredients.value, value] 
+            ? [...data.ingredients.value, value]
             : data.ingredients.value.filter((ingredient) => ingredient !== value);
 
         const updatedData = { ...data, ingredients: { ...data.ingredients, value: updatedIngredients } };
         setData(updatedData);
-        validateForm(updatedData);
     };
 
-    // Ad-Soyad ve Not için handler
     const handleInputChange = (e) => {
         const { name, value } = e.target;
         const updatedData = { ...data, [name]: value };
         setData(updatedData);
-        validateForm(updatedData);
     };
 
-    // Sayaç
     const incrementQuantity = () => {
         setData((prevData) => ({
             ...prevData,
@@ -69,28 +63,37 @@ export default function FormPizza() {
     const decrementQuantity = () => {
         setData((prevData) => ({
             ...prevData,
-            quantity: Math.max(1, prevData.quantity - 1), // 1'den küçük olamaz
+            quantity: Math.max(1, prevData.quantity - 1),
         }));
     };
 
-    const choose = data.ingredients.value.length * 5;
+    const choose = (data.ingredients.value.length * 5)*data.quantity;
     const total = data.quantity * 85.50 + choose;
 
-    // Form doğrulama fonksiyonu
     const validateForm = (updatedData) => {
-        const errors = {
-            name: updatedData.name.length < 3 ? "İsim 3 karakterden az olamaz" : "",
-            size: !updatedData.size.value ? "Lütfen boyut seçiniz" : "",
-            dough: !updatedData.dough.value ? "Lütfen hamur kalınlığını seçiniz" : "",
-            ingredients: updatedData.ingredients.value.length < 4 || updatedData.ingredients.value.length > 10
-                ? "Malzeme seçiminiz en az 4, en çok 10 olmalıdır"
-                : "",
-        };
+        const errors = {};
+
+        if (updatedData.name.length < 3) {
+            errors.name = errorMessage.name;
+        }
+        if (!updatedData.size.value) {
+            errors.size = errorMessage.size;
+        }
+        if (!updatedData.dough.value) {
+            errors.dough = errorMessage.dough;
+        }
+        if (updatedData.ingredients.value.length < 4 || updatedData.ingredients.value.length > 10) {
+            errors.ingredients = errorMessage.ingredients;
+        }
+
         setFormErrors(errors);
-        setIsFormValid(Object.values(errors).every((error) => error === ""));
+        setIsFormValid(Object.keys(errors).length === 0);
     };
 
-    // Form gönderiminde tetiklenen handler
+    useEffect(() => {
+        validateForm(data);
+    }, [data]);
+
     const handleSubmit = (event) => {
         event.preventDefault();
         if (!isFormValid) {
@@ -106,14 +109,11 @@ export default function FormPizza() {
             .catch((error) => {
                 console.error("Sipariş Hatası:", error);
             });
-
-
     };
 
     return (
         <>
             <Form onSubmit={handleSubmit}>
-                {/* İsim Soyisim Alanı */}
                 <FormGroup>
                     <Label for="name">Pizza kim için hazırlanıyor?</Label>
                     <Input
@@ -128,7 +128,6 @@ export default function FormPizza() {
                     <FormFeedback>{formErrors.name}</FormFeedback>
                 </FormGroup>
 
-                {/* Boyut Seçimi */}
                 <FormGroup>
                     <Label for="size">Boyut Seçiniz <span>&#42;</span></Label>
                     {data.size.options.map((size) => (
@@ -148,7 +147,6 @@ export default function FormPizza() {
                     {formErrors.size && <FormFeedback>{formErrors.size}</FormFeedback>}
                 </FormGroup>
 
-                {/* Hamur Seçimi */}
                 <FormGroup>
                     <Label for="dough">Hamur Seçiniz <span>&#42;</span></Label>
                     <Input
@@ -166,10 +164,9 @@ export default function FormPizza() {
                             </option>
                         ))}
                     </Input>
-                    {formErrors.dough && <FormFeedback>{formErrors.dough}</FormFeedback>}
+                    <FormFeedback>{formErrors.dough}</FormFeedback>
                 </FormGroup>
 
-                {/* Malzeme Seçimi (Checkbox) */}
                 <FormGroup>
                     <Label>Malzeme Seçiniz <span>&#42;</span></Label>
                     <fieldset>
@@ -187,10 +184,9 @@ export default function FormPizza() {
                             </div>
                         ))}
                     </fieldset>
-                    {formErrors.ingredients && <FormFeedback>{formErrors.ingredients}</FormFeedback>}
+                    <FormFeedback>{formErrors.ingredients}</FormFeedback>
                 </FormGroup>
 
-                {/* Not Alanı */}
                 <FormGroup>
                     <Label for="note">Sipariş Notu</Label>
                     <Input
@@ -203,13 +199,12 @@ export default function FormPizza() {
                     />
                 </FormGroup>
 
-                {/* Miktar Sayacı */}
                 <FormGroup>
                     <Button onClick={(e) => { e.preventDefault(); decrementQuantity(); }}>-</Button>
                     <span style={{ padding: "0 10px" }}>{data.quantity}</span>
                     <Button onClick={(e) => { e.preventDefault(); incrementQuantity(); }}>+</Button>
                 </FormGroup>
-                {/* Sipariş Toplamı */}
+
                 <FormGroup>
                     <p>Sipariş Toplamı</p>
                     <div>

@@ -10,7 +10,7 @@ export default function Assent() {
         return <p>Geçerli sipariş bulunamadı!</p>;
     }
 
-    const choose = formData.ingredients.value.length * 5;
+    const choose = (formData.ingredients.value.length * 5)*formData.quantity;
     const total = formData.quantity * 85.50 + choose;
 
     return (
