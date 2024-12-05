@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Form, FormGroup, Label, Input, Button, FormFeedback } from 'reactstrap';
+import { Form, FormGroup, Label, Input, FormFeedback } from 'reactstrap';
 import axios from 'axios';
 import { useHistory } from "react-router-dom/cjs/react-router-dom.min";
 import "./FormPizza.css";
@@ -131,7 +131,7 @@ export default function FormPizza() {
     </div>
   <div className= "row-size-dough">
     <div className="form-group size-options" data-cy="form-group-size">
-        <p for="size">Boyut Seçiniz <span>*</span></p>
+        <p for="size">Boyut Seçiniz <span style={{color:"red"}}>*</span></p>
         <div className='row-size'>
         {data.size.options.map((size) => (
             <div key={size}>
