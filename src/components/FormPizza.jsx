@@ -3,14 +3,47 @@ import { Form, FormGroup, Label, Input, FormFeedback } from 'reactstrap';
 import axios from 'axios';
 import { useHistory } from "react-router-dom/cjs/react-router-dom.min";
 import "./FormPizza.css";
+import { toast, ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+
 
 export default function FormPizza() {
+
     const errorMessage = {
         name: "İsim 3 karakterden az olamaz.",
         size: "Lütfen boyut seçiniz.",
         dough: "Lütfen hamur kalınlığını seçiniz.",
         ingredients: "Malzeme seçiminiz en az 4, en çok 10 olmalıdır."
     };
+
+    const happyMessage = {
+        name: "Pizza yolculuğuna hoş geldiniz! 🍕 Hazırsanız, size harika bir lezzet şöleni hazırlıyoruz. 😋",
+        size: "Seçiminiz mükemmel! 👌 Bu boyut, iştahınıza tam uygun olacak. 🍽️",
+        dough: "Hamur seçiminiz tamam! 🥖 Şimdi bu lezzet sizi mest edecek. Afiyet olsun! 😍",
+        ingredients: "Harika seçim! 🌟 Bu eklemeyle pizzanızın tadına doyamayacaksınız."
+    };
+
+
+    const showHappyToast = (field) => {
+        const happyMessages = {
+            name: happyMessage.name,
+            size: happyMessage.size,
+            dough: happyMessage.dough,
+            ingredients: happyMessage.ingredients
+        };
+        if (happyMessages[field]) {
+            toast.info(happyMessages[field], {
+                position: "top-right",
+                autoClose: 2000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+            });
+        }
+    };
+
 
     const formData = {
         name: "",
@@ -68,7 +101,7 @@ export default function FormPizza() {
         }));
     };
 
-    const choose = (data.ingredients.value.length * 5)*data.quantity;
+    const choose = (data.ingredients.value.length * 5) * data.quantity;
     const total = data.quantity * 85.50 + choose;
 
     const validateForm = (updatedData) => {
@@ -98,7 +131,7 @@ export default function FormPizza() {
     const handleSubmit = (event) => {
         event.preventDefault();
         if (!isFormValid) {
-            alert("Lütfen tüm alanları doğru şekilde doldurun.");
+            toast.error("Lütfen tüm alanları doğru şekilde doldurun.");
             return;
         }
 
@@ -108,148 +141,155 @@ export default function FormPizza() {
                 history.push("/success", { orderData: response.data, formData: data });
             })
             .catch((error) => {
-                console.error("Sipariş Hatası:", error);
+                toast.error("Sipariş Hatası:", error);
             });
     };
 
     return (
         <div className="FormPizza">
             <Form onSubmit={handleSubmit} className="form-pizza" data-cy="form-pizza">
-    <div className="form-group-name">
-        <Label for="name">Pizza kim için hazırlanıyor?</Label>
-        <Input
-            type="text"
-            name="name"
-            id="name"
-            value={data.name}
-            placeholder="İsim Soyisim"
-            onChange={handleInputChange}
-            invalid={!!formErrors.name}
-            data-cy="input-name"
-        />
-        <FormFeedback data-cy="error-name">{formErrors.name}</FormFeedback>
-    </div>
-  <div className= "row-size-dough">
-    <div className="form-group size-options" data-cy="form-group-size">
-        <p for="size">Boyut Seçiniz <span style={{color:"red"}}>*</span></p>
-        <div className='row-size'>
-        {data.size.options.map((size) => (
-            <div key={size}>
-                <Input
-                    name="size"
-                    type="radio"
-                    id={size}
-                    value={size}
-                    checked={data.size.value === size}
-                    onChange={handleSelectChange}
-                    invalid={!!formErrors.size}
-                    data-cy="input-size"
-                />
-                <Label htmlFor={size}>{size}</Label>
-            </div>
-        ))}
-        </div>
-        {formErrors.size && (
-            <FormFeedback data-cy="error-size">{formErrors.size}</FormFeedback>
-        )}
-    </div>
+                {/* Isim Alani */}
+                <div className="form-group-name">
+                    <Label htmlFor="name">Pizza kim için hazırlanıyor?</Label>
+                    <Input
+                        type="text"
+                        name="name"
+                        id="name"
+                        value={data.name}
+                        placeholder="İsim Soyisim"
+                        onChange={handleInputChange}
+                        invalid={!!formErrors.name}
+                        onFocus={() => showHappyToast("name")}
+                        data-cy="input-name"
+                    />
+                    <FormFeedback data-cy="error-name">{formErrors.name}</FormFeedback>
+                </div>
+                {/* Pizza Boyutu Alani */}
+                <div className="row-size-dough">
+                    <div className="form-group size-options" data-cy="form-group-size">
+                        <p htmlFor="size">Boyut Seçiniz <span style={{ color: "red" }}>*</span></p>
+                        <div className='row-size'>
+                            {data.size.options.map((size) => (
+                                <div key={size}>
+                                    <Input
+                                        name="size"
+                                        type="radio"
+                                        id={size}
+                                        value={size}
+                                        checked={data.size.value === size}
+                                        onChange={(e) => { handleSelectChange(e); showHappyToast("size"); }}
+                                        invalid={!!formErrors.size}
+                                        data-cy="input-size"
+                                    />
+                                    <Label htmlFor={size}>{size}</Label>
+                                </div>
+                            ))}
+                        </div>
+                        {formErrors.size && (
+                            <FormFeedback data-cy="error-size">{formErrors.size}</FormFeedback>
+                        )}
+                    </div>
+                    {/* Hamur KAlinligi Alani */}
+                    <div className="form-group-dough" data-cy="form-group-dough">
+                        <Label htmlFor="dough">Hamur Seçiniz <span>*</span></Label>
+                        <Input
+                            type="select"
+                            name="dough"
+                            id="dough"
+                            value={data.dough.value}
+                            onChange={handleSelectChange}
+                            invalid={!!formErrors.dough}
+                            onFocus={() => showHappyToast("dough")}
+                            data-cy="input-dough"
+                        >
+                            <option value="">Hamur Kalınlığı</option>
+                            {data.dough.options.map((dough, index) => (
+                                <option key={index} value={dough}>
+                                    {dough}
+                                </option>
+                            ))}
+                        </Input>
+                        {formErrors.dough && (
+                            <FormFeedback data-cy="error-dough">{formErrors.dough}</FormFeedback>)}
+                    </div>
+                </div>
+                {/*Malzeme Secimi Alani */}
+                <div className="form-group ingredient-options" data-cy="form-group-ingredients">
+                    <Label>Malzeme Seçiniz <span>*</span></Label>
+                    <legend>En fazla 10 malzeme seçebilirsiniz. (5 ₺ her biri)</legend>
+                    <div className="ingredient-options-box">
+                        {data.ingredients.options.map((ingredient, index) => (
+                            <div className='row-ingredient' key={index}>
+                                <Input
+                                    name="ingredients"
+                                    type="checkbox"
+                                    id={`ingredient-${index}`}
+                                    value={ingredient}
+                                    checked={data.ingredients.value.includes(ingredient)}
+                                    onChange={(e) => { handleCheckboxChange(e); showHappyToast("ingredients"); }}
+                                    data-cy={`input-ingredient-${ingredient}`}
+                                />
+                                <p htmlFor={`ingredient-${index}`}>{ingredient}</p>
+                            </div>
+                        ))}
+                    </div>
+                    {formErrors.ingredients && (
+                        <FormFeedback data-cy="error-ingredients">{formErrors.ingredients}</FormFeedback>)}
+                </div>
 
-    <div className="form-group-dough" data-cy="form-group-dough">
-        <Label for="dough">Hamur Seçiniz <span>*</span></Label>
-        <Input
-            type="select"
-            name="dough"
-            id="dough"
-            value={data.dough.value}
-            onChange={handleSelectChange}
-            invalid={!!formErrors.dough}
-            data-cy="input-dough"
-        >
-            <option value="">Hamur Kalınlığı</option>
-            {data.dough.options.map((dough, index) => (
-                <option key={index} value={dough}>
-                    {dough}
-                </option>
-            ))}
-        </Input>
-        <FormFeedback  data-cy="error-dough">
-            {formErrors.dough}
-        </FormFeedback>
-    </div>
-    </div>
-    <div className="form-group ingredient-options" data-cy="form-group-ingredients">
-        <Label>Malzeme Seçiniz <span>*</span></Label>
-        <legend>En fazla 10 malzeme seçebilirsiniz. (5 ₺ her biri)</legend>
-        <div className="ingredient-options-box">
-        {data.ingredients.options.map((ingredient, index) => (
-            <div className='row-ingredient' key={index}>
-                <Input
-                    type="checkbox"
-                    id={`ingredient-${index}`}
-                    value={ingredient}
-                    checked={data.ingredients.value.includes(ingredient)}
-                    onChange={handleCheckboxChange}
-                    data-cy={`input-ingredient-${ingredient}`}
-                />
-                <p htmlFor={`ingredient-${index}`}>{ingredient}</p>
-            </div> 
-        ))}
-         </div>
-        <FormFeedback data-cy="error-ingredients">{formErrors.ingredients}</FormFeedback>
-    </div>
-
-    <div className="form-group-note" data-cy="form-group-note">
-        <Label for="note">Sipariş Notu</Label>
-        <Input
-            type="textarea"
-            id="note"
-            name="note"
-            value={data.note}
-            placeholder="Siparişine eklemek istediğin bir not var mı?"
-            onChange={handleInputChange}
-            data-cy="input-note"
-        />
-    </div>
-    <hr/>
-     <FormGroup className="price"> 
-    <div className="form-group quantity" data-cy="form-group-quantity">
-        <button
-            onClick={(e) => {
-                e.preventDefault();
-                decrementQuantity();
-            }}
-            data-cy="button-decrement">-</button>
-        <span data-cy="quantity-value">{data.quantity}</span>
-        <button
-            onClick={(e) => {
-                e.preventDefault();
-                incrementQuantity();
-            }}
-            data-cy="button-increment"> +</button>
-    </div>
-
-    <div className="form-group order-summary" data-cy="form-group-summary">
-        <p>Sipariş Toplamı</p>
-        <div className="smmry-choose">
-            <p>Seçimler:</p>
-            <span data-cy="summary-choose">{choose}₺</span>
-        </div>
-        <div className="smmry-total">
-            <p>Toplam:</p>
-            <span data-cy="summary-total">{total}₺</span>
-        </div>
-        <button
-        type="submit"
-        className="submit-button"
-        disabled={!isFormValid}
-        data-cy="button-submit">
-        Siparişi Tamamla
-    </button>
-    </div>
-    </FormGroup>  
-</Form>
-
-
+                {/* Siparis Notu Alani */}
+                <div className="form-group-note" data-cy="form-group-note">
+                    <Label htmlFor="note">Sipariş Notu</Label>
+                    <Input
+                        type="textarea"
+                        id="note"
+                        name="note"
+                        value={data.note}
+                        placeholder="Siparişine eklemek istediğin bir not var mı?"
+                        onChange={handleInputChange}
+                        data-cy="input-note"
+                    />
+                </div>
+                <hr />
+                {/* Sayac Alani */}
+                <FormGroup className="price">
+                    <div className="form-group quantity" data-cy="form-group-quantity">
+                        <button
+                            onClick={(e) => {
+                                e.preventDefault();
+                                decrementQuantity();
+                            }}
+                            data-cy="button-decrement">-</button>
+                        <span data-cy="quantity-value">{data.quantity}</span>
+                        <button
+                            onClick={(e) => {
+                                e.preventDefault();
+                                incrementQuantity();
+                            }}
+                            data-cy="button-increment"> +</button>
+                    </div>
+                    {/*Siparis Ozeti Alani */}
+                    <div className="form-group order-summary" data-cy="form-group-summary">
+                        <p>Sipariş Toplamı</p>
+                        <div className="smmry-choose">
+                            <p>Seçimler:</p>
+                            <span data-cy="summary-choose">{choose}₺</span>
+                        </div>
+                        <div className="smmry-total">
+                            <p>Toplam:</p>
+                            <span data-cy="summary-total">{total}₺</span>
+                        </div>
+                        <button
+                            type="submit"
+                            className="submit-button"
+                            disabled={!isFormValid}
+                            data-cy="button-submit">
+                            Siparişi Tamamla
+                        </button>
+                    </div>
+                </FormGroup>
+            </Form>
+            <ToastContainer />
         </div>
     );
 }
