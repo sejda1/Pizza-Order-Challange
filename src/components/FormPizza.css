@@ -6,7 +6,7 @@
     font-family: Barlow;
     max-width: 38rem;
     margin: 0 auto;
-    padding: 20px;
+    padding: 1.25rem;
     background-color: white;
 }
 
@@ -18,9 +18,9 @@
 .form-group-name input[type="text"] {
     background-color: #FAF7F2;
     width: 100%;
-    padding: 10px;
-    border: 1px solid #ddd;
-    border-radius: 5px;
+    padding: 0.625rem;
+    border: 0.063rem solid #ddd;
+    border-radius: 0.313rem;
     background-color: #FAF7F2;
     margin-bottom: 1.5rem;
 }
@@ -28,12 +28,12 @@
 label {
     display: block;
     font-weight: bold;
-    margin-bottom: 5px;
+    margin-bottom: 0.313rem;
 }
 
 legend {
     color: #5F5F5F;
-    font-size: 16px;
+    font-size: 1rem;
 }
 
 label span {
@@ -52,13 +52,13 @@ label span {
 .size-options {
     display: flex;
     flex-direction: column;
-    gap: 10px;
+    gap: 0.625rem;
 }
 
 .size-options p {
     display: block;
     font-weight: bold;
-    margin-bottom: 5px;
+    margin-bottom: 0.313rem;
 }
 
 .row-size {
@@ -69,14 +69,14 @@ label span {
     display: flex;
     align-items: center;
     justify-content: center;
-    padding: 10px;
-    border: 1px solid #ddd;
+    padding: 0.625rem;
+    border: 0.063rem solid #ddd;
     border-radius: 50%;
     cursor: pointer;
     background: #FAF7F2;
-    width: 40px;
-    height: 40px;
-    margin-right: 10px;
+    width: 2.5rem;
+    height: 2.5rem;
+    margin-right: 0.625rem;
 }
 
 .size-options input[type="radio"] {
@@ -110,29 +110,29 @@ label span {
 .ingredient-options-box {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
-    gap: 10px;
+    gap: 0.625rem;
     background: white;
     color: #FAF7F2;
 }
 
 .ingredient-options p {
-    font-size: 16px;
-    color: #5F5F5F
+    font-size: 1rem;
+    color: #5F5F5F;
 }
 
 .row-ingredient {
     display: flex;
     align-items: center;
-    gap: 10px;
+    gap: 0.625rem;
 }
 
 .row-ingredient input[type="checkbox"] {
     appearance: none;
-    width: 20px;
-    height: 20px;
+    width: 1.25rem;
+    height: 1.25rem;
     background-color: #FAF7F2;
-    border: 2px solid #ccc;
-    border-radius: 3px;
+    border: 0.125rem solid #ccc;
+    border-radius: 0.188rem;
     cursor: pointer;
 }
 
@@ -148,10 +148,10 @@ label span {
 /* Sipariş Notu */
 textarea {
     width: 100%;
-    height: 60px;
-    padding: 10px;
-    border: 1px solid #ddd;
-    border-radius: 5px;
+    height: 3.75rem;
+    padding: 0.625rem;
+    border: 0.063rem solid #ddd;
+    border-radius: 0.313rem;
     background-color: #FAF7F2;
     margin-bottom: 1.5rem;
 }
@@ -161,7 +161,7 @@ textarea {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    gap: 20px;
+    gap: 1.25rem;
     margin-top: 1.5rem;
 }
 
@@ -171,24 +171,24 @@ textarea {
     flex-direction: row;
     align-items: center;
     justify-content: space-between;
-    border: 1px solid #D9D9D9;
-    border-radius: 5px;
+    border: 0.063rem solid #D9D9D9;
+    border-radius: 0.313rem;
 }
 
 .quantity button {
-    width: 40px;
-    height: 40px;
-    border: 1px solid #D9D9D9;
+    width: 2.5rem;
+    height: 2.5rem;
+    border: 0.063rem solid #D9D9D9;
     background: #ffc107;
     color: white;
-    font-size: 18px;
-    border-radius: 5px;
+    font-size: 1.125rem;
+    border-radius: 0.313rem;
     cursor: pointer;
 }
 
 .quantity span {
-    padding: 0 20px;
-    font-size: 18px;
+    padding: 0 1.25rem;
+    font-size: 1.125rem;
 }
 
 /* Sipariş Özeti */
@@ -196,14 +196,14 @@ textarea {
     flex: 1;
     background: #FAF7F2;
     padding: 2rem;
-    border: 1px solid #5F5F5F80;
-    border-radius: 5px;
+    border: 0.063rem solid #5F5F5F80;
+    border-radius: 0.313rem;
     min-height: 10rem;
 }
 
 .order-summary p {
     font-weight: bold;
-    margin-bottom: 10px;
+    margin-bottom: 0.625rem;
 }
 
 .smmry-choose,
@@ -220,16 +220,16 @@ textarea {
     width: 100%;
     background: #ffc107;
     color: black;
-    font-size: 16px;
-    padding: 10px;
+    font-size: 1rem;
+    padding: 0.625rem;
     border: none;
-    border-radius: 5px;
+    border-radius: 0.313rem;
 }
 
-/*Hata mesajlari */
+/* Hata mesajlari */
 .invalid-feedback {
     display: block;
-    margin-top: 5px;
+    margin-top: 0.313rem;
     font-size: 0.9rem;
     color: red;
 }

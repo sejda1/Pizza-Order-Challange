@@ -1,64 +1,72 @@
 .assent {
     background-color: #CE2829;
-    display:flex;
+    display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
-
 }
+
 .yellowText {
     font-family: Satisfy;
-    font-size: 32px;
-    color:#FDC913;
+    font-size: 2rem; 
+    color: #FDC913;
 }
+
 h1 {
-    font-size: 48px;
-    color:#FFFFFF;
-    line-height: 92px;
+    font-size: 2rem; 
+    color: #FFFFFF;
+    line-height: 6rem; 
     font-family: Roboto Condensed;
     font-weight: 400;
 }
+
 .horizontal-line {
-    width: 50%;              
-    height: 2px;               
-    background-color: white;   
-    margin: 20px 0;            
+    width: 70%;
+    height: 2px; 
+    background-color: white;
+    margin: 1.25rem 0; 
 }
+
 .pizzaName {
-    font-size: 22px;
-    color:#FFFFFF;
+    font-size: 1.5rem; 
+    color: #FFFFFF;
     font-family: Barlow;
     font-weight: bold;
 }
+
 .order-detail {
-    width:220px;
-    height: 153px;
-    display:flex;
+    width: 14rem; 
+    height: 10rem; 
+    display: flex;
     flex-direction: column;
     margin: 2rem 0;
 }
-.order-detail p{
+
+.order-detail p {
     font-family: Barlow;
-    font-size:16px;
-    color:#FFFFFF;
+    font-size: 1rem; 
+    color: #FFFFFF;
 }
-.payment{
-    display:flex;
+
+.payment {
+    display: flex;
     flex-direction: column;
-    border: 1px solid #FFFFFF;
+    border: 1px solid #FFFFFF; 
     margin: 5rem auto;
-    padding:3rem;
-    width: 350px;
-    height: 197px;
-    gap:1rem;
+    padding: 2rem; 
+    width: 22rem; 
+    height: 13rem; 
+    gap: 1rem;
 }
+
 .payment p {
-    color:#FFFFFF;
+    color: #FFFFFF;
     font-weight: bold;
 }
+
 .chooser, .totals {
-    display:flex;
+    display: flex;
     flex-direction: row;
     justify-content: space-between;
-    color:#FFFFFF;
+    color: #FFFFFF;
 }
