@@ -43,7 +43,7 @@ a {
 /* HEADER */
 
 .header-container {
-  background: url(./images/iteration-1-images/home-banner.png);
+  background: url(/images/iteration-1-images/home-banner.png);
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
@@ -153,7 +153,7 @@ a {
 }
 
 .box1 {
-  background: url(./images/iteration-2-images/cta/kart-1.png);
+  background: url(/images/iteration-2-images/cta/kart-1.png);
   background-size: cover;
   background-repeat: no-repeat;
   background-position: center;
@@ -163,7 +163,7 @@ a {
 }
 
 .box2 {
-  background: url(./images/iteration-2-images/cta/kart-2.png);
+  background: url(/images/iteration-2-images/cta/kart-2.png);
   background-size: cover;
   background-repeat: no-repeat;
   background-position: right;
@@ -173,7 +173,7 @@ a {
 }
 
 .box3 {
-  background: url(./images/iteration-2-images/cta/kart-3.png);
+  background: url(/images/iteration-2-images/cta/kart-3.png);
   background-size: cover;
   background-repeat: no-repeat;
   background-position: right;
