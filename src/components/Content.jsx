@@ -1,10 +1,25 @@
+import React from "react";
 import { useHistory } from "react-router-dom";
-export default function Content () {
+
+
+import ramenIcon from "/images/iteration-2-images/icons/1.svg";
+import pizzaIcon from "/images/iteration-2-images/icons/2.svg";
+import burgerIcon from "/images/iteration-2-images/icons/3.svg";
+import friesIcon from "/images/iteration-2-images/icons/4.svg";
+import fastFoodIcon from "/images/iteration-2-images/icons/5.svg";
+import drinksIcon from "/images/iteration-2-images/icons/6.svg";
+import food1 from "/images/iteration-2-images/pictures/food-1.png";
+import food2 from "/images/iteration-2-images/pictures/food-2.png";
+import food3 from "/images/iteration-2-images/pictures/food-3.png";
+
+export default function Content() {
     const history = useHistory();
-    const handleClick =()=> history.push("/order"); 
+
+    const handleClick = () => history.push("/order");
+
     return (
         <>
-         <main className="wrapper">
+            <main className="wrapper">
                 <div className="container">
                     <section className="card-container">
                         <div className="box box1">
@@ -35,27 +50,27 @@ export default function Content () {
                 <div className="container">
                     <section className="button-container">
                         <button className="btn-card">
-                            <img src="./images/iteration-2-images/icons/1.svg" alt="Ramen" />
+                            <img src={ramenIcon} alt="Ramen" />
                             <span className="btn-card-text">Ramen</span>
                         </button>
                         <button className="btn-card">
-                            <img src="./images/iteration-2-images/icons/2.svg" alt="Pizza" />
+                            <img src={pizzaIcon} alt="Pizza" />
                             <span className="btn-card-text">Pizza</span>
                         </button>
                         <button className="btn-card">
-                            <img src="./images/iteration-2-images/icons/3.svg" alt="Burger" />
+                            <img src={burgerIcon} alt="Burger" />
                             <span className="btn-card-text">Burger</span>
                         </button>
                         <button className="btn-card">
-                            <img src="./images/iteration-2-images/icons/4.svg" alt="French fries" />
+                            <img src={friesIcon} alt="French fries" />
                             <span className="btn-card-text">French fries</span>
                         </button>
                         <button className="btn-card">
-                            <img src="./images/iteration-2-images/icons/5.svg" alt="Fast food" />
+                            <img src={fastFoodIcon} alt="Fast food" />
                             <span className="btn-card-text">Fast food</span>
                         </button>
                         <button className="btn-card">
-                            <img src="./images/iteration-2-images/icons/6.svg" alt="Soft drinks" />
+                            <img src={drinksIcon} alt="Soft drinks" />
                             <span className="btn-card-text">Soft drinks</span>
                         </button>
                     </section>
@@ -63,7 +78,7 @@ export default function Content () {
                 <div className="container">
                     <section className="favorite-container">
                         <div className="favorite">
-                            <img src="./images/iteration-2-images/pictures/food-1.png" />
+                            <img src={food1} alt="Terminal Pizza" />
                             <div className="favorite-text">
                                 <h5>Terminal Pizza</h5>
                                 <div className="mini-text">
@@ -74,7 +89,7 @@ export default function Content () {
                             </div>
                         </div>
                         <div className="favorite">
-                            <img src="./images/iteration-2-images/pictures/food-2.png" />
+                            <img src={food2} alt="Position Absolute Acı Pizza" />
                             <div className="favorite-text">
                                 <h5>Position Absolute Acı Pizza</h5>
                                 <div className="mini-text">
@@ -85,7 +100,7 @@ export default function Content () {
                             </div>
                         </div>
                         <div className="favorite">
-                            <img src="./images/iteration-2-images/pictures/food-3.png" />
+                            <img src={food3} alt="useEffect Tavuklu Burger" />
                             <div className="favorite-text">
                                 <h5>useEffect Tavuklu Burger</h5>
                                 <div className="mini-text">
@@ -98,7 +113,6 @@ export default function Content () {
                     </section>
                 </div>
             </main>
-
         </>
-    )
+    );
 }
